@@ -10,9 +10,11 @@ Put the following content into your bazel workspace:
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 http_archive(
-    name = "com_github_dprogm_rules_capicxx",
-    url = "https://github.com/dprogm/rules_capicxx/archive/refs/heads/main.zip",
-    # strip_prefix = "",
+  name = "com_github_dprogm_rules_capicxx",
+  url = "https://github.com/dprogm/rules_capicxx/archive/refs/heads/main.zip",
+  # Update the hash value accordingly
+  # sha256 = "e8a1dcdd6dd7bb0982756dbe4d2896639f5844ab436c9296b86748c05e018139",
+  strip_prefix = "rules_capicxx-main",
 )
 
 load("@com_github_dprogm_rules_capicxx//:deps.bzl", "deps")
