@@ -1,0 +1,4 @@
+py_binary(
+  name = "config_generator",
+  srcs = ["config_generator.py"],
+)
