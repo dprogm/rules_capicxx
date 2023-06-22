@@ -2,7 +2,7 @@ import configparser
 import argparse
 import json
 import re
-from typing import Dict
+from typing import Dict, List
 from pathlib import Path
 from textwrap import dedent
 
@@ -43,7 +43,7 @@ def parse_vars_from_config(config_file_path : Path) -> Dict[str,str]:
     # Insert an arbitrary section name.
     try:
       config.read_string("[_hidden_]\n" + config_file.read())
-    except  configparser.ParsingError:
+    except configparser.ParsingError:
       return { }
   key_val_pairs : Dict[str,str] = { }
   for sec in config.sections():
@@ -68,7 +68,19 @@ def parse_vars(vars_file_path : Path) -> Dict[str,str]:
     return as_str(parse_vars_from_toml(vars_file_path))
   if vars_file_path.suffix == '.json':
     return as_str(parse_vars_from_json(vars_file_path))
-  return parse_vars_from_config(vars_file_path)
+  if vars_file_path.suffix == '.conf':
+    return parse_vars_from_config(vars_file_path)
+  if not vars_file_path.suffix:
+    with open(vars_file_path) as vars_file:
+      return {vars_file_path.name : vars_file.read()}
+  # Other formats are not supported
+  return { }
+
+def get_vars(var_file_paths : List[str]) -> Dict[str,str]:
+  merged_vars : Dict[str,str] = { }
+  for var_file_path in var_file_paths:
+    merged_vars.update(parse_vars(Path(var_file_path)))
+  return merged_vars
 
 def replace_cmake_defines(line : str, variables : Dict[str,str]) -> str:
   ''' Implements exactly the same logic as CMake 'configure_file' does.
@@ -77,13 +89,50 @@ def replace_cmake_defines(line : str, variables : Dict[str,str]) -> str:
   '''
   m = re.search('#([ \t]*)cmakedefine([ \t]+)([A-Za-z_0-9]*)', line)
   if m:
-    if variables.get(m.group(3)):
-      return '#' + m.group(1) + 'define' + m.group(2) + m.group(3) + line[m.end():]
-    return '/* #undef ' + m.group(3) + ' */' + '\n' if line.endswith('\n') else ''
-  return ''
+    var_name = m.group(3)
+    if variables.get(var_name):
+      return '#' + m.group(1) + 'define' + m.group(2) + var_name + line[m.end():]
+    return '/* #undef ' + var_name + ' */' + '\n' if line.endswith('\n') else ''
+  m = re.search('#([ \t]*)cmakedefine01([ \t]+)([A-Za-z_0-9]*)', line)
+  if m:
+    var_name = m.group(3)
+    out = '#' + m.group(1) + 'define' + m.group(2) + var_name
+    if variables.get(var_name):
+      out += ' 1'
+    else:
+      out += ' 0'
+    out += '\n' if line.endswith('\n') else ''
+    return out
+  return line
 
 def replace_variables(line : str, variables : Dict[str,str]) -> str:
-  return line
+  ''' Replace all variable occurrences by its associated value.
+  The implemented logic shall comply with the CMake implementation.
+  However there is no additional meaning of $CACHE{VAR} and $ENV{VAR}
+  in this context, which means they are treated as normal variables.
+  '''
+  var_patterns = [
+    '\$\{([A-Za-z_0-9]*)\}',
+    '@([A-Za-z_0-9]*)@',
+    '\$CACHE\{([A-Za-z_0-9]*)\}',
+    '\$ENV\{([A-Za-z_0-9]*)\}']
+  out = line
+  for var_pattern in var_patterns:
+    m = re.search(var_pattern, out)
+    cur = ''
+    idx = 0
+    while m:
+      cur += out[idx:m.start()]
+      idx = m.end()
+      var = m.group(1)
+      val = variables.get(var)
+      if val:
+        cur += val
+      else:
+        cur += ''
+      m = re.search(var_pattern, out[idx:])
+    out = cur + out[idx:]
+  return out
 
 def main():
   parser = argparse.ArgumentParser(
@@ -97,8 +146,8 @@ def main():
     help = 'The input file path which contains the variables that should be substituted, e.g. config.h.in')
   parser.add_argument('--output', required = True,
     help = 'The output file path. Here the resulting output file will be stored, e.g. config.h')
-  parser.add_argument('--vars', required = True,
-    help = '''The variables file path. This can either be a *.json, *.toml or INI file.
+  parser.add_argument('vars', nargs = '*',
+    help = '''The variables file paths. This can either be a *.json, *.toml or *.conf (INI) file.
               It contains key/value pairs where the key corresponds to the variable which should
               be substituted and the value that replaces the variable. Note that keys in INI files
               are case-insensitive. They are automatically converted into an uppercase string by
@@ -106,18 +155,21 @@ def main():
               pair like this 'var_name:new_var_name=value' or 'var_name=new_var_name=value. Using
               an '=' in the value requires the latter syntax. Sections are not required. The json
               should consist of a flat object. Values are stored as strings. This also applies to
-              toml files.
+              toml files. If the given file doesn't have a file extension it is treated as a single
+              variable where the file name is the variables name and the value is the file content.
            ''')
 
   args = parser.parse_args()
 
-  variables = parse_vars(Path(args.vars))
+  variables = get_vars(args.vars)
   if not variables:
     print(dedent(f'''
           No variables found in file {args.vars}.
           * Does the file exist?
           * Maybe you did not provide a valid configuration file?
           -> Check whether there is a warning emitted.''').strip('\n'))
+    return
+
   input_file_path = Path(args.input)
   if not input_file_path.exists():
     print(f'Input file at {input_file_path} does not exist!')

@@ -1,4 +1,14 @@
 py_binary(
   name = "config_generator",
   srcs = ["config_generator.py"],
+  visibility = ["//visibility:public"],
+)
+
+py_test(
+  name = "config_generator_test",
+  srcs = ["config_generator_test.py"],
+  deps = [
+    ":config_generator",
+  ],
+  timeout = "short",
 )
