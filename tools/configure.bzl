@@ -12,7 +12,6 @@ def _configure_impl(ctx):
     outputs = [ctx.outputs.output],
     progress_message = "Generating file for %s" % ctx.file.input.short_path,
   )
-  #return [DefaultInfo(files = depset([ctx.outputs.output]))]
 
 configure = rule(
   implementation = _configure_impl,

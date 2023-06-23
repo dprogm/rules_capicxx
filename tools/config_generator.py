@@ -122,8 +122,8 @@ def replace_variables(line : str, variables : Dict[str,str]) -> str:
     cur = ''
     idx = 0
     while m:
-      cur += out[idx:m.start()]
-      idx = m.end()
+      cur += out[idx:idx+m.start()]
+      idx = idx + m.end()
       var = m.group(1)
       val = variables.get(var)
       if val:

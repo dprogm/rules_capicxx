@@ -24,3 +24,11 @@ def deps():
     sha256 = "bd50eac54970dfb2f16b77fa4955b28208a9a3d894787b7e3f8cfcb72fed1856",
     strip_prefix = "capicxx-someip-runtime-3.2.0",
   )
+
+  http_archive(
+    name = "org_freedesktop_gitlab_dbus",
+    build_file = "@com_github_dprogm_rules_capicxx//third_party/dbus:dbus.BUILD",
+    url = "https://gitlab.freedesktop.org/dbus/dbus/-/archive/dbus-1.15.6/dbus-dbus-1.15.6.tar.gz",
+    sha256 = "614d61cda795280065f743ed05bbec0ff7ac036a9eb828cb5fb865465fc2d61a",
+    strip_prefix = "dbus-dbus-1.15.6",
+  )
