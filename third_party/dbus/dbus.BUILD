@@ -215,5 +215,6 @@ cc_library(
   defines = [
     "DBUS_COMPILATION",
   ],
-  copts = ["-I dbus"],
+  includes = ["."],
+  visibility = [ "//visibility:public" ],
 )
