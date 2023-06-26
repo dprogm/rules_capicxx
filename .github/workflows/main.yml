@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: bazelbuild/setup-bazelisk@v2
+      - run: bazel build @com_github_covesa_capicxx_dbus_runtime//:capicxx_dbus_runtime
+      - run: bazel test //...
+      
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: bazelbuild/setup-bazelisk@v2
+      - run: bazel build @com_github_covesa_capicxx_dbus_runtime//:capicxx_dbus_runtime
+      - run: bazel test //...

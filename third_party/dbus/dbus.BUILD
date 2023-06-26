@@ -14,17 +14,20 @@ configure(
   input = "cmake/config.h.cmake",
   configs = [
     ":header_config",
-    "@com_github_dprogm_rules_capicxx//third_party/dbus:dbus.conf",
-  ],
+  ] + select({
+    "@bazel_tools//src/conditions:darwin_x86_64": ["@com_github_dprogm_rules_capicxx//third_party/dbus/darwin_x86_64:dbus.conf"],
+    "@bazel_tools//src/conditions:linux_x86_64": ["@com_github_dprogm_rules_capicxx//third_party/dbus/linux_x86_64:dbus.conf"],
+  }),
   output = "config.h",
 )
 
 configure(
   name = "dbus_arch_deps",
   input = "dbus/dbus-arch-deps.h.in",
-  configs = [
-    "@com_github_dprogm_rules_capicxx//third_party/dbus:arch.conf",
-  ],
+  configs = select({
+    "@bazel_tools//src/conditions:darwin_x86_64": ["@com_github_dprogm_rules_capicxx//third_party/dbus/darwin_x86_64:arch.conf"],
+    "@bazel_tools//src/conditions:linux_x86_64": ["@com_github_dprogm_rules_capicxx//third_party/dbus/linux_x86_64:arch.conf"],
+  }),
   output = "dbus/dbus-arch-deps.h",
 )
 

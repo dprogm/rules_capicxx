@@ -1,6 +1,4 @@
 exports_files([
   "header.tpl",
   "header.conf",
-  "dbus.conf",
-  "arch.conf",
 ])
