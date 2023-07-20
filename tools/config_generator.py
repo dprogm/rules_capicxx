@@ -117,21 +117,30 @@ def replace_variables(line : str, variables : Dict[str,str]) -> str:
     '\$CACHE\{([A-Za-z_0-9]*)\}',
     '\$ENV\{([A-Za-z_0-9]*)\}']
   out = line
-  for var_pattern in var_patterns:
-    m = re.search(var_pattern, out)
-    cur = ''
-    idx = 0
-    while m:
-      cur += out[idx:idx+m.start()]
-      idx = idx + m.end()
-      var = m.group(1)
-      val = variables.get(var)
-      if val:
-        cur += val
-      else:
-        cur += ''
-      m = re.search(var_pattern, out[idx:])
-    out = cur + out[idx:]
+  while True:
+    found_var = False
+    for var_pattern in var_patterns:
+      m = re.search(var_pattern, out)
+      found_var = found_var or m
+      if not m:
+        continue
+      cur = ''
+      idx = 0
+      while True:
+        cur += out[idx:idx+m.start()]
+        idx = idx + m.end()
+        var = m.group(1)
+        val = variables.get(var)
+        if val:
+          cur += val
+        else:
+          cur += ''
+        m = re.search(var_pattern, out[idx:])
+        if not m:
+          break
+      out = cur + out[idx:]
+    if not found_var:
+      break
   return out
 
 def main():

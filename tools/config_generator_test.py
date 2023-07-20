@@ -21,7 +21,7 @@ class TestVariableSubstitution(unittest.TestCase):
     exp_sub = '#define VAR_X '
     self.assertEqual(res, exp_sub)
 
-  def test_multiple_substitutions(self):
+  def test_mixed_variable_substitutions(self):
     var = {
       'VAR_X' : '123',
       'VAR_Y' : '456' }
@@ -33,10 +33,20 @@ class TestVariableSubstitution(unittest.TestCase):
     var = {
       'VAR_X' : '123',
       'VAR_Y' : '456',
-      'VAR_Z' : '789'  }
+      'VAR_Z' : '789' }
     input = '#define COMPLEX ((@VAR_X@ << 16) | (@VAR_Y@ << 8) | (@VAR_Z@)) '
     res = config_generator.replace_variables(input, var)
     exp_sub = '#define COMPLEX ((123 << 16) | (456 << 8) | (789)) '
+    self.assertEqual(res, exp_sub)
+
+  def test_nested_variable_substitutions(self):
+    var = {
+      'VAR_X' : 'NAME',
+      'TEST_NAME_XY' : 'NEW_VAR',
+      'NEW_VAR_PLUS' : '123' }
+    input = '#define ${${TEST_${VAR_X}_XY}_PLUS}'
+    res = config_generator.replace_variables(input, var)
+    exp_sub = '#define 123'
     self.assertEqual(res, exp_sub)
 
 if __name__ == '__main__':
