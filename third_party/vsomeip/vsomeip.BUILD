@@ -52,7 +52,16 @@ cc_library(
   ],
   deps = [
     ":internal_config",
-    "@boost//:asio"
+    "@boost//:property_tree",
+    "@boost//:filesystem",
+    "@boost//:algorithm",
+    "@boost//:optional",
+    "@boost//:utility",
+    "@boost//:foreach",
+    "@boost//:array",
+    "@boost//:thread",
+    "@boost//:asio",
+    "@boost//:icl"
   ],
   defines = [
     "VSOMEIP_BOOST_VERSION=108200",
