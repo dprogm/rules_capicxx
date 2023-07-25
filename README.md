@@ -19,22 +19,38 @@ http_archive(
 
 load("@com_github_dprogm_rules_capicxx//:deps.bzl", "deps")
 deps()
+
+load("@com_github_nelhage_rules_boost//:boost/boost.bzl", "boost_deps")
+boost_deps()
 ```
 
 This brings the following labels into scope:
 
-| Library                  | Label                                                              |
-|--------------------------|--------------------------------------------------------------------|
-| CommonAPI Core Runtime   | @com_github_covesa_capicxx_core_runtime//:capicxx_core_runtime     |
-| CommonAPI DBus Runtime   | @com_github_covesa_capicxx_dbus_runtime//:capicxx_dbus_runtime     |
-| CommonAPI SomeIP Runtime | @com_github_covesa_capicxx_someip_runtime//:capicxx_someip_runtime |
+| Library                  | Label                                                              | Version |
+|--------------------------|--------------------------------------------------------------------|---------|
+| CommonAPI Core Runtime   | @com_github_covesa_capicxx_core_runtime//:capicxx_core_runtime     | 3.2.0   |
+| CommonAPI DBus Runtime   | @com_github_covesa_capicxx_dbus_runtime//:capicxx_dbus_runtime     | 3.2.0   |
+| CommonAPI SomeIP Runtime | @com_github_covesa_capicxx_someip_runtime//:capicxx_someip_runtime | 3.2.0   |
+
+The following third party library versions are currently used:
+
+| Library | Version |
+|---------|---------|
+| dbus    | 1.15.6  |
+| vsomeip | 3.3.8   |
+| boost   | 1.82    |
 
 # Supported Platforms
 
 The goal is to support MacOS, Linux and Windows.
 
+| Library | MacOS              | Linux              | Windows |
+|---------|--------------------|--------------------|---------|
+| dbus    | :heavy_check_mark: | :heavy_check_mark: | :x:     |
+| vsomeip | :x:                | :heavy_check_mark: | :x:     |
+
 # Next Steps
 
 - [ ] Complete the build files for the binding libraries
-- [ ] Add build file for `dbus`
-- [ ] Add build file for `vsomeip`
+- [x] Add build file for `dbus`
+- [x] Add build file for `vsomeip`
