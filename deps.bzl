@@ -3,7 +3,11 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 def deps():
   http_archive(
     name = "com_github_covesa_capicxx_core_runtime",
-    build_file = "@com_github_dprogm_rules_capicxx//:capicxx_core_runtime.BUILD",
+    build_file = "@com_github_dprogm_rules_capicxx//core:capicxx_core_runtime.BUILD",
+    patch_args = ["-p1"],
+    patches = [
+      "@com_github_dprogm_rules_capicxx//core:capicxx_core_runtime.patch"
+    ],
     url = "https://github.com/COVESA/capicxx-core-runtime/archive/refs/tags/3.2.0.tar.gz",
     sha256 = "e2e7921a0e0c0d42f8a57028ab020566ee2c717b045b5e87513e1d4a91f16669",
     strip_prefix = "capicxx-core-runtime-3.2.0",

@@ -1,0 +1,22 @@
+diff --git a/src/CommonAPI/Utils.cpp b/src/CommonAPI/Utils.cpp
+index 8f7f6e7..d1891f6 100644
+--- a/src/CommonAPI/Utils.cpp
++++ b/src/CommonAPI/Utils.cpp
+@@ -31,7 +31,7 @@ void trim(std::string& toTrim) {
+         std::find_if(
+             toTrim.begin(),
+             toTrim.end(),
+-            std::not1(std::ptr_fun(isspace))
++            [](char c) { return !std::isspace(c); }
+         )
+     );
+ 
+@@ -39,7 +39,7 @@ void trim(std::string& toTrim) {
+         std::find_if(
+             toTrim.rbegin(),
+             toTrim.rend(),
+-            std::not1(std::ptr_fun(isspace))).base(),
++            [](char c) { return !std::isspace(c); }).base(),
+             toTrim.end()
+     );
+ }
