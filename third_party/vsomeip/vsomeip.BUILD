@@ -67,5 +67,6 @@ cc_library(
     "VSOMEIP_BOOST_VERSION=108200",
     "WITHOUT_SYSTEMD",
     "VSOMEIP_INTERNAL_SUPPRESS_DEPRECATED"
-  ]
+  ],
+  visibility = ["//visibility:public"],
 )
