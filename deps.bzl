@@ -59,9 +59,10 @@ def deps():
     strip_prefix = "dbus-dbus-1.15.6",
   )
 
+  # Jul 26, 2023
   http_archive(
     name = "com_github_nelhage_rules_boost",
-    url = "https://github.com/nelhage/rules_boost/archive/refs/heads/master.zip",
-    sha256 = "31c8b36e72fd6ea76179f781c3af2288384c95a0ab8edbe4d17357b4e0fa0965",
-    strip_prefix = "rules_boost-master",
+    url = "https://github.com/nelhage/rules_boost/archive/45015796689f17e9fc7972073eb7830784c40ee9.zip",
+    sha256 = "b375550dde177abb48d9fc6edf63a7850aec350cdb4dc3360a456ea0fbd7d45c",
+    strip_prefix = "rules_boost-45015796689f17e9fc7972073eb7830784c40ee9",
   )
