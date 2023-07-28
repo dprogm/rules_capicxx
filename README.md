@@ -1,3 +1,5 @@
+[![CI](https://github.com/dprogm/rules_capicxx/actions/workflows/main.yml/badge.svg)](https://github.com/dprogm/rules_capicxx/actions/workflows/main.yml)
+
 # Bazel build rules for CommonAPI
 
 Contains bazel build rules for building the CommonAPI core runtime as well as the commonly used binding runtimes for `dbus` and `vsomeip`.
