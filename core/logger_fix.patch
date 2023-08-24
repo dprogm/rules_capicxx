@@ -1,0 +1,57 @@
+diff --git a/include/CommonAPI/Logger.hpp b/include/CommonAPI/Logger.hpp
+index 0658be8..752fa8f 100644
+--- a/include/CommonAPI/Logger.hpp
++++ b/include/CommonAPI/Logger.hpp
+@@ -83,8 +83,6 @@ public:
+                      bool _useDlt, const std::string& _level);
+ 
+ private:
+-    class LoggerImpl;
+-    static std::unique_ptr<LoggerImpl> loggerImpl_;
+ 
+     COMMONAPI_EXPORT static bool isLogged(Level _level);
+     COMMONAPI_EXPORT static void doLog(Level _level, const std::string& _message);
+diff --git a/src/CommonAPI/Logger.cpp b/src/CommonAPI/Logger.cpp
+index f5804c8..b98176a 100644
+--- a/src/CommonAPI/Logger.cpp
++++ b/src/CommonAPI/Logger.cpp
+@@ -18,7 +18,7 @@
+ 
+ namespace CommonAPI {
+ 
+-class Logger::LoggerImpl {
++class LoggerImpl {
+ public:
+     LoggerImpl() :
+             maximumLogLevel_(Logger::Level::CAPI_LOG_INFO),
+@@ -176,23 +176,25 @@ private:
+ #endif
+ };
+ 
+-std::unique_ptr<Logger::LoggerImpl> Logger::loggerImpl_ =
+-        std::unique_ptr<Logger::LoggerImpl>(new Logger::LoggerImpl());
++static const auto & getLoggerImpl() {
++    static auto loggerImpl_ = std::make_unique<LoggerImpl>();
++    return loggerImpl_;
++}
+ 
+ Logger::Logger() = default;
+ Logger::~Logger() = default;
+ 
+ void Logger::init(bool _useConsole, const std::string &_fileName, bool _useDlt,
+                   const std::string& _level) {
+-    loggerImpl_->init(_useConsole, _fileName, _useDlt, _level);
++    getLoggerImpl()->init(_useConsole, _fileName, _useDlt, _level);
+ }
+ 
+ bool Logger::isLogged(Level _level) {
+-    return loggerImpl_->isLogged(_level);
++    return getLoggerImpl()->isLogged(_level);
+ }
+ 
+ void Logger::doLog(Level _level, const std::string& _message) {
+-    loggerImpl_->doLog(_level, _message);
++    getLoggerImpl()->doLog(_level, _message);
+ }
+ 
+ } //namespace CommonAPI

@@ -24,3 +24,11 @@ cc_library(
   ],
   visibility = ["//visibility:public"],
 )
+
+cc_shared_library(
+  name = "shared_lib",
+  deps = [
+    ":capicxx_core_runtime",
+  ],
+  visibility = ["//visibility:public"]
+)
