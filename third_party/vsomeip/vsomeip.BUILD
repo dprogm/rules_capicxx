@@ -70,3 +70,73 @@ cc_library(
   ],
   visibility = ["//visibility:public"],
 )
+
+cc_library(
+  name = "vsomeip_sd",
+  srcs = glob([
+    "implementation/service_discovery/include/*.hpp",
+    "implementation/service_discovery/src/*.cpp"
+  ]),
+  deps = [
+    ":vsomeip",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+cc_shared_library(
+  name = "vsomeip_sd_shared_lib",
+  deps = [
+    ":vsomeip_sd",
+  ],
+  visibility = ["//visibility:public"]
+)
+
+genrule(
+   name = "vsomeip_sd_shared_lib_patched",
+   srcs = ["vsomeip_sd_shared_lib"],
+   outs = ["libvsomeip3-sd.so.3"],
+   cmd = "cp $(location vsomeip_sd_shared_lib) $(location libvsomeip3-sd.so.3)",
+   visibility = ["//visibility:public"]
+
+)
+
+cc_library(
+  name = "vsomeip_e2e",
+  srcs = glob([
+    "implementation/e2e_protection/include/**/*.hpp",
+    "implementation/e2e_protection/src/**/*.cpp",
+  ]),
+  deps = [
+    ":vsomeip",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+cc_library(
+  name = "vsomeip_cfg",
+  srcs = glob([
+    #"implementation/e2e_protection/include/**/*.hpp",
+    "implementation/configuration/src/*.cpp",
+  ]),
+  deps = [
+    ":vsomeip",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+cc_shared_library(
+  name = "vsomeip_cfg_shared_lib",
+  deps = [
+    ":vsomeip_cfg",
+  ],
+  visibility = ["//visibility:public"]
+)
+
+genrule(
+   name = "vsomeip_cfg_shared_lib_patched",
+   srcs = ["vsomeip_cfg_shared_lib"],
+   outs = ["libvsomeip3-cfg.so.3"],
+   cmd = "cp $(location vsomeip_cfg_shared_lib) $(location libvsomeip3-cfg.so.3)",
+   visibility = ["//visibility:public"]
+
+)
