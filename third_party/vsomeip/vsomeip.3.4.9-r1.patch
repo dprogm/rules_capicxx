@@ -1,0 +1,194 @@
+diff --git a/implementation/endpoints/include/endpoint_host.hpp b/implementation/endpoints/include/endpoint_host.hpp
+index e5ca6d1..068c468 100644
+--- a/implementation/endpoints/include/endpoint_host.hpp
++++ b/implementation/endpoints/include/endpoint_host.hpp
+@@ -15,7 +15,7 @@
+ #ifdef ANDROID
+ #include "../../configuration/include/internal_android.hpp"
+ #else
+-#include "../../configuration/include/internal.hpp"
++#include "internal.hpp"
+ #endif
+ 
+ namespace vsomeip_v3 {
+diff --git a/implementation/endpoints/src/credentials.cpp b/implementation/endpoints/src/credentials.cpp
+index deebaaa..d248768 100644
+--- a/implementation/endpoints/src/credentials.cpp
++++ b/implementation/endpoints/src/credentials.cpp
+@@ -15,7 +15,7 @@
+ #ifdef ANDROID
+ #include "../../configuration/include/internal_android.hpp"
+ #else
+-#include "../../configuration/include/internal.hpp"
++#include "internal.hpp"
+ #endif
+ 
+ namespace vsomeip_v3 {
+diff --git a/implementation/endpoints/src/tp.cpp b/implementation/endpoints/src/tp.cpp
+index 3599950..7097b87 100644
+--- a/implementation/endpoints/src/tp.cpp
++++ b/implementation/endpoints/src/tp.cpp
+@@ -13,7 +13,7 @@
+ #ifdef ANDROID
+ #include "../../configuration/include/internal_android.hpp"
+ #else
+-#include "../../configuration/include/internal.hpp"
++#include "internal.hpp"
+ #endif // ANDROID
+ 
+ #if defined(__linux__) || defined(ANDROID) || defined(__QNX__)
+diff --git a/implementation/endpoints/src/tp_message.cpp b/implementation/endpoints/src/tp_message.cpp
+index 986976f..3a66364 100644
+--- a/implementation/endpoints/src/tp_message.cpp
++++ b/implementation/endpoints/src/tp_message.cpp
+@@ -15,7 +15,7 @@
+ #ifdef ANDROID
+ #include "../../configuration/include/internal_android.hpp"
+ #else
+-#include "../../configuration/include/internal.hpp"
++#include "internal.hpp"
+ #endif // ANDROID
+ 
+ #if defined(__linux__) || defined(ANDROID) || defined(__QNX__)
+diff --git a/implementation/endpoints/src/tp_reassembler.cpp b/implementation/endpoints/src/tp_reassembler.cpp
+index a1d0b45..d55e40e 100644
+--- a/implementation/endpoints/src/tp_reassembler.cpp
++++ b/implementation/endpoints/src/tp_reassembler.cpp
+@@ -17,7 +17,7 @@
+ #ifdef ANDROID
+ #include "../../configuration/include/internal_android.hpp"
+ #else
+-#include "../../configuration/include/internal.hpp"
++#include "internal.hpp"
+ #endif // ANDROID
+ 
+ namespace vsomeip_v3 {
+diff --git a/implementation/message/src/message_impl.cpp b/implementation/message/src/message_impl.cpp
+index 47250c1..87042ba 100644
+--- a/implementation/message/src/message_impl.cpp
++++ b/implementation/message/src/message_impl.cpp
+@@ -11,7 +11,7 @@
+ #ifdef ANDROID
+ #include "../../configuration/include/internal_android.hpp"
+ #else
+-#include "../../configuration/include/internal.hpp"
++#include "internal.hpp"
+ #endif
+ #include "../../utility/include/byteorder.hpp"
+ 
+diff --git a/implementation/plugin/src/plugin_manager_impl.cpp b/implementation/plugin/src/plugin_manager_impl.cpp
+index bea96d0..2f96e75 100644
+--- a/implementation/plugin/src/plugin_manager_impl.cpp
++++ b/implementation/plugin/src/plugin_manager_impl.cpp
+@@ -26,7 +26,7 @@
+ #ifdef ANDROID
+ #include "../../configuration/include/internal_android.hpp"
+ #else
+-#include "../../configuration/include/internal.hpp"
++#include "internal.hpp"
+ #endif // ANDROID
+ 
+ #include "../../utility/include/utility.hpp"
+diff --git a/implementation/routing/include/routing_host.hpp b/implementation/routing/include/routing_host.hpp
+index 1decea3..cebd407 100644
+--- a/implementation/routing/include/routing_host.hpp
++++ b/implementation/routing/include/routing_host.hpp
+@@ -16,7 +16,7 @@
+ #ifdef ANDROID
+ #include "../../configuration/include/internal_android.hpp"
+ #else
+-#include "../../configuration/include/internal.hpp"
++#include "internal.hpp"
+ #endif // ANDROID
+ 
+ namespace vsomeip_v3 {
+diff --git a/implementation/routing/include/routing_manager.hpp b/implementation/routing/include/routing_manager.hpp
+index 49ae806..ebbbe06 100644
+--- a/implementation/routing/include/routing_manager.hpp
++++ b/implementation/routing/include/routing_manager.hpp
+@@ -29,7 +29,7 @@
+ #ifdef ANDROID
+ #include "../../configuration/include/internal_android.hpp"
+ #else
+-#include "../../configuration/include/internal.hpp"
++#include "internal.hpp"
+ #endif // ANDROID
+ 
+ namespace vsomeip_v3 {
+diff --git a/implementation/routing/src/eventgroupinfo.cpp b/implementation/routing/src/eventgroupinfo.cpp
+index e5f2a6d..4ed2c40 100644
+--- a/implementation/routing/src/eventgroupinfo.cpp
++++ b/implementation/routing/src/eventgroupinfo.cpp
+@@ -15,7 +15,7 @@
+ #ifdef ANDROID
+ #include "../../configuration/include/internal_android.hpp"
+ #else
+-#include "../../configuration/include/internal.hpp"
++#include "internal.hpp"
+ #endif // ANDROID
+ #include "../../endpoints/include/endpoint_definition.hpp"
+ 
+diff --git a/implementation/runtime/include/application_impl.hpp b/implementation/runtime/include/application_impl.hpp
+index ad803ab..b5f6c90 100644
+--- a/implementation/runtime/include/application_impl.hpp
++++ b/implementation/runtime/include/application_impl.hpp
+@@ -26,7 +26,7 @@
+ #ifdef ANDROID
+ #include "../../configuration/include/internal_android.hpp"
+ #else
+-#include "../../configuration/include/internal.hpp"
++#include "internal.hpp"
+ #endif // ANDROID
+ #include "../../routing/include/routing_manager_host.hpp"
+ 
+diff --git a/implementation/runtime/src/application_impl.cpp b/implementation/runtime/src/application_impl.cpp
+index 0c3ef9d..4335cc1 100644
+--- a/implementation/runtime/src/application_impl.cpp
++++ b/implementation/runtime/src/application_impl.cpp
+@@ -8,6 +8,7 @@
+ #include <iomanip>
+ #include <iostream>
+ 
++#include <boost/asio/detail/posix_signal_blocker.hpp>
+ #include <boost/asio/ip/host_name.hpp>
+ #include <boost/asio/ip/tcp.hpp>
+ #include <boost/exception/diagnostic_information.hpp>
+diff --git a/implementation/security/src/policy_manager_impl.cpp b/implementation/security/src/policy_manager_impl.cpp
+index 5a3e7bd..f295661 100644
+--- a/implementation/security/src/policy_manager_impl.cpp
++++ b/implementation/security/src/policy_manager_impl.cpp
+@@ -18,7 +18,7 @@
+ #ifdef ANDROID
+ #include "../../configuration/include/internal_android.hpp"
+ #else
+-#include "../../configuration/include/internal.hpp"
++#include "internal.hpp"
+ #endif // ANDROID
+ #include "../../utility/include/utility.hpp"
+ 
+diff --git a/implementation/security/src/security.cpp b/implementation/security/src/security.cpp
+index a3b6ab3..dca90ef 100644
+--- a/implementation/security/src/security.cpp
++++ b/implementation/security/src/security.cpp
+@@ -9,7 +9,7 @@
+ #ifdef ANDROID
+ #include "../../configuration/include/internal_android.hpp"
+ #else
+-#include "../../configuration/include/internal.hpp"
++#include "internal.hpp"
+ #endif
+ #include "../../plugin/include/plugin_manager.hpp"
+ 
+diff --git a/implementation/service_discovery/src/message_impl.cpp b/implementation/service_discovery/src/message_impl.cpp
+index cec09a1..2392308 100644
+--- a/implementation/service_discovery/src/message_impl.cpp
++++ b/implementation/service_discovery/src/message_impl.cpp
+@@ -13,7 +13,7 @@
+ #ifdef ANDROID
+ #include "../../configuration/include/internal_android.hpp"
+ #else
+-#include "../../configuration/include/internal.hpp"
++#include "internal.hpp"
+ #endif // ANDROID
+ 
+ #include "../include/constants.hpp"
